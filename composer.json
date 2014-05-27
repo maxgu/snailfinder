@@ -1,7 +1,13 @@
 {
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://packages.zendframework.com/"
+        }
+    ],
+    "minimum-stability": "dev",
     "require": {
-        "slim/slim": "2.*",
-        "petebrowne/slim-layout-view": "0.3.*"
+        "phly/phlyty": "dev-master"
     }
 }
 
