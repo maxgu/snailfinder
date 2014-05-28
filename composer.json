@@ -5,9 +5,8 @@
             "url": "http://packages.zendframework.com/"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
-        "phly/phlyty": "dev-master"
+        "phly/phlyty": "~1.0"
     }
 }
 
