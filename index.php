@@ -14,9 +14,12 @@ $app = new App();
 $errorHandler = new ErrorHandler();
 
 $app->events()->attach('500', $errorHandler);
+$app->events()->attach('501', $errorHandler);
+
+$app->setView(new Snailfinder\PhpView());
 
 $app->get('/', function (App $app) {
-    $app->render('templates/index', array());
+    $app->render('index', array('na' => 'ddd'));
 });
 
 $app->get('/hello/:name', function (App $app) {
