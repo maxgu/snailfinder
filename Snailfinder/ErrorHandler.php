@@ -8,12 +8,18 @@
  * @package snailfinder
  */
 
+namespace Snailfinder;
+
 use Phlyty\AppEvent;
 
 class ErrorHandler {
     
     public static function __invoke(AppEvent $app) {
-        die(var_dump($app));
+        /* @var $exception \Exception */
+        $exception = $app->getParam('exception');
+        
+        echo $exception->getMessage() . '<br><hr>';
+        echo '<pre>' . $exception->getTraceAsString() . '</pre>';
     }
 
 }
