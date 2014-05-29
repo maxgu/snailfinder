@@ -8,6 +8,7 @@ include 'vendor/autoload.php';
 
 use Phlyty\App;
 use Snailfinder\ErrorHandler;
+use Snailfinder\Application;
 
 $app = new App();
 
@@ -18,8 +19,6 @@ $app->events()->attach('501', $errorHandler);
 
 $app->setView(new Snailfinder\PhpView());
 
-$app->get('/', function (App $app) {
-    $app->render('index', array('na' => 'ddd'));
-});
+$app->get('/', new Application());
 
 $app->run();
