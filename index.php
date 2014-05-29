@@ -9,9 +9,9 @@ include 'vendor/autoload.php';
 
 $app = new App();
 
-$app->events()->attach('500', function ($e) {
-    die(var_dump($e));
-});
+$errorHandler = new ErrorHandler();
+
+$app->events()->attach('500', $errorHandler);
 
 $app->get('/', function (App $app) {
     die(var_dump($app->render('templates/foo', array())));
