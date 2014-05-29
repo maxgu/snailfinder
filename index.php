@@ -22,8 +22,4 @@ $app->get('/', function (App $app) {
     $app->render('index', array('na' => 'ddd'));
 });
 
-$app->get('/hello/:name', function (App $app) {
-    echo "Hello, " . $app->params()->getParam('name');
-});
-
 $app->run();

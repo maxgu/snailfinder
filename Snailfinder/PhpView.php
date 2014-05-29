@@ -29,12 +29,17 @@ class PhpView implements ViewInterface {
         $resolver->attach($stack);
 
         $renderer->setResolver($resolver);
-
-        $model = new ViewModel();
-        $model->setVariables($viewModel);
-        $model->setTemplate($template . '.tpl');
         
-        return $renderer->render($model);
+        $layout = new ViewModel();
+        $layout->setTemplate('layout/default.tpl');
+
+        $content = new ViewModel();
+        $content->setVariables($viewModel);
+        $content->setTemplate($template . '.tpl');
+        
+        $layout->content = $renderer->render($content);
+        
+        return $renderer->render($layout);
     }
     
 }
