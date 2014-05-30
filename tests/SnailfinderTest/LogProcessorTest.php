@@ -7,6 +7,11 @@ use Snailfinder\LogProcessor;
 class LogProcessorTest extends \PHPUnit_Framework_TestCase {
     
     private $path;
+    
+    /**
+     *
+     * @var LogProcessor 
+     */
     private $processor;
     
     public function setUp() {
@@ -19,8 +24,10 @@ class LogProcessorTest extends \PHPUnit_Framework_TestCase {
         $this->assertAttributeEquals($this->path, 'path', $this->processor);
     }
     
-    public function testPathCanbeReadable() {
+    public function testGetFilesystemAdapter() {
+        $adapter = $this->processor->getFilesystemAdapter();
         
+        $this->assertInstanceOf('League\Flysystem\AdapterInterface', $adapter);
     }
 }
 
