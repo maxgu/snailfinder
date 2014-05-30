@@ -10,12 +10,16 @@
 
 namespace Snailfinder;
 
-use Phlyty\App;
-
-class Application {
+class LogProcessor {
     
-    public static function __invoke(App $app) {
-        $app->render('index', array('na' => 'ddd'));
+    /**
+     *
+     * @var string
+     */
+    private $path;
+    
+    public function __construct($path) {
+        $this->path = $path;
     }
-
+    
 }

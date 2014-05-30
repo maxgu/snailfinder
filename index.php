@@ -8,7 +8,8 @@ include 'vendor/autoload.php';
 
 use Phlyty\App;
 use Snailfinder\ErrorHandler;
-use Snailfinder\Application;
+use Snailfinder\LogProcessor;
+use Snailfinder\PhpView;
 
 $app = new App();
 
@@ -17,8 +18,17 @@ $errorHandler = new ErrorHandler();
 $app->events()->attach('500', $errorHandler);
 $app->events()->attach('501', $errorHandler);
 
-$app->setView(new Snailfinder\PhpView());
+$app->setView(new PhpView());
 
-$app->get('/', new Application());
+$app->get('/', function(App $app){
+    $app->render('index');
+});
+
+$app->get('/generate', function(App $app){
+    
+    $processor = new LogProcessor();
+    
+    $app->redirect('/');
+});
 
 $app->run();

@@ -12,7 +12,8 @@
     },
     "autoload": {
         "psr-0": {
-            "Snailfinder":  "."
+            "Snailfinder":  ".",
+            "SnailfinderTest":  "/tests"
         }
     }
 }
