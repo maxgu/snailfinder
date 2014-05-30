@@ -8,7 +8,8 @@
     "require": {
         "phly/phlyty": "~1.0",
         "zendframework/zend-view": "2.*",
-        "zendframework/zend-filter": "2.*"
+        "zendframework/zend-filter": "2.*",
+        "league/flysystem": "0.4.*"
     },
     "autoload": {
         "psr-0": {
