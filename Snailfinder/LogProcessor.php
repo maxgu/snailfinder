@@ -48,7 +48,11 @@ class LogProcessor {
     }
     
     public function parse($path) {
-        $r = $this->filesystem->readStream($path);
+        $stream = $this->filesystem->readStream($path);
+        
+        if (!$stream) {
+            return;
+        }
         
         // TODO: for mocking this - need extends from Flysystem\Adapter\Local
         /*

@@ -38,20 +38,38 @@ class LogProcessorTest extends \PHPUnit_Framework_TestCase {
         $this->assertAttributeEquals($this->filesystemMock, 'filesystem', $this->processor);
     }
     
-    public function testParse() {
+    public function testParseReturnNullWhenFileNotOpened() {
         
         $path = dirname(__DIR__) . '/assets/php5-fpm.slow.log';
         
-//        $this->filesystemMock->expects($this->once())
-//            ->method('readStream')
-//            ->with($path)
-//            ->will($this->returnValue(false));
-//        
-//        $this->setExpectedException('RuntimeException');
+        $this->filesystemMock->expects($this->once())
+            ->method('readStream')
+            ->with($path)
+            ->will($this->returnValue(false));
         
-        $this->processor->parse($path);
+        $result = $this->processor->parse($path);
         
-        $this->assertTrue(true);
+        $this->assertNull($result);
+    }
+    
+    public function testParseWillReadLines() {
+        
+        $path = dirname(__DIR__) . '/assets/php5-fpm.slow.log';
+        $someResource = 123;
+        $someLine = "[27-May-2014 05:43:20]  [pool www] pid 19569\n";
+        
+        $this->filesystemMock->expects($this->once())
+            ->method('readStream')
+            ->with($path)
+            ->will($this->returnValue($someResource));
+        
+        $this->filesystemMock->expects($this->any())
+            ->method('getLine')
+            ->will($this->returnValue($someLine));
+        
+        $result = $this->processor->parse($path);
+        
+        $this->assertNull($result);
     }
 }
 
