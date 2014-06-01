@@ -12,49 +12,54 @@ namespace Snailfinder;
 
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local as LocalAdapter;
-use League\Flysystem\AdapterInterface;
+use League\Flysystem\FilesystemInterface;
 
 class LogProcessor {
     
     /**
      *
-     * @var string
+     * @var FilesystemInterface
      */
-    private $path;
-    
-    /**
-     *
-     * @var AdapterInterface
-     */
-    private $filesystemAdapter;
-    
-    public function __construct($path) {
-        $this->path = $path;
-    }
+    private $filesystem;
     
     /**
      * Retrieve filesystem adapter instance
      *
      * If none present, lazy-loads League\Flysystem\Adapter\Local instance.
      *
-     * @return AdapterInterface
+     * @return FilesystemInterface
      */
-    public function getFilesystemAdapter() {
-        if (!$this->filesystemAdapter instanceof AdapterInterface) {
-            $this->setFilesystemAdapter(new Filesystem(new LocalAdapter($this->path)));
+    public function getFilesystem() {
+        if (!$this->filesystem instanceof FilesystemInterface) {
+            $this->setFilesystem(new Filesystem(new LocalAdapter('/')));
         }
-        return $this->filesystemAdapter;
+        return $this->filesystem;
     }
     
     /**
      * Set filesystem adapter object
      *
-     * @param  AdapterInterface $adapter
+     * @param  FilesystemInterface $filesystem
      * @return LogProcessor
      */
-    public function setFilesystemAdapter(AdapterInterface $adapter){
-        $this->filesystemAdapter = $adapter;
+    public function setFilesystem(FilesystemInterface $filesystem){
+        $this->filesystem = $filesystem;
         return $this;
+    }
+    
+    public function parse($path) {
+        $r = $this->filesystem->readStream($path);
+        
+        // TODO: for mocking this - need extends from Flysystem\Adapter\Local
+        if ($handle) {
+            while (($buffer = fgets($handle, 4096)) !== false) {
+                echo $buffer;
+            }
+            if (!feof($handle)) {
+                echo "Error: unexpected fgets() fail\n";
+            }
+            fclose($handle);
+        }
     }
     
 }
