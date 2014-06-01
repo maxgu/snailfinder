@@ -51,6 +51,7 @@ class LogProcessor {
         $r = $this->filesystem->readStream($path);
         
         // TODO: for mocking this - need extends from Flysystem\Adapter\Local
+        /*
         if ($handle) {
             while (($buffer = fgets($handle, 4096)) !== false) {
                 echo $buffer;
@@ -60,6 +61,7 @@ class LogProcessor {
             }
             fclose($handle);
         }
+         */
     }
     
 }

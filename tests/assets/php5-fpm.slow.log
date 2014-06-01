@@ -1,4 +1,3 @@
-
 [27-May-2014 05:43:20]  [pool www] pid 19569
 script_filename = /var/www/unidom.ua/index.php
 [0x0000000001d17fc8] mysql_query() /var/www/unidom.ua/framework/classes/db/mysql.php:29
