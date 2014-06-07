@@ -19,6 +19,7 @@
             h3 { color:#FFB462; border-bottom:1px solid #FFB462; font-weight:bold; font-size:12px; margin-bottom:10px; padding-bottom:2px; }
             .generateButton{margin-top:5px;background-color: #FFFFFF;border: 1px solid #000000;font-size: 11px;padding: 1px;}
             form { border:1px solid #CBD0D3; -moz-border-radius:6px;	padding:10px; margin-top:5px; background-color:#DCF1F4; }
+            .error { color:red; }
             .tip { background-color:#EBF0FC; -moz-border-radius:10px; padding:6px; margin:5px; }
             ul { padding-left: 14px; padding-top: 0px; padding-bottom: 0px; margin-bottom: 0px; margin-top: 0px; }
             ul li { list-style-type: square; }

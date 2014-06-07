@@ -1,5 +1,6 @@
 <form action="generate" method="get">
-    Path to php-fpm.log file: <input type="text" name="path" style="width:20em">
+    Path to php-fpm.log file: <input type="text" name="path" style="width:20em" value="<?=$this->path?>">
+    <span class="error"><?=$this->error;?></span>
     <br>
     <input type="submit" class="generateButton" value="Generate now" >
 </form>        

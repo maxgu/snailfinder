@@ -27,8 +27,14 @@ $app->get('/', function(App $app){
 $app->get('/generate', function(App $app){
     
     $processor = new LogProcessor();
+    $processor->parse($app->request()->getQuery('path'));
     
-    $app->redirect('/');
+    $viewModel = array(
+        'path' => $app->request()->getQuery('path', ''),
+        'error' => $processor->getError()
+    );
+    
+    $app->render('index', $viewModel);
 });
 
 $app->run();

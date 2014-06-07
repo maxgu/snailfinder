@@ -19,7 +19,9 @@ class LogProcessorTest extends \PHPUnit_Framework_TestCase {
     private $filesystemMock;
     
     public function setUp() {
-        $this->filesystemMock = $this->getMock('League\Flysystem\FilesystemInterface');
+        $this->filesystemMock = $this->getMockBuilder('Snailfinder\Filesystem')
+                ->disableOriginalConstructor()
+                ->getMock();
         
         $this->processor = new LogProcessor();
         $this->processor->setFilesystem($this->filesystemMock);
@@ -31,42 +33,78 @@ class LogProcessorTest extends \PHPUnit_Framework_TestCase {
         
         $filesystem = $processor->getFilesystem();
         
-        $this->assertInstanceOf('League\Flysystem\FilesystemInterface', $filesystem);
+        $this->assertInstanceOf('Snailfinder\Filesystem', $filesystem);
     }
     
     public function testSetFilesystem() {
         $this->assertAttributeEquals($this->filesystemMock, 'filesystem', $this->processor);
     }
     
+    public function testParseReturnNullWhenFileNotFound() {
+        
+        $path = 'php5-fpm.slow.log';
+        
+        $this->filesystemMock->expects($this->once())
+            ->method('has')
+            ->with($path)
+            ->will($this->returnValue(false));
+        
+        $this->filesystemMock->expects($this->never())
+            ->method('readStream');
+        
+        $result = $this->processor->parse($path);
+        
+        $this->assertNull($result);
+        $this->assertNotEmpty($this->processor->getError());
+    }
+    
     public function testParseReturnNullWhenFileNotOpened() {
         
-        $path = dirname(__DIR__) . '/assets/php5-fpm.slow.log';
+        $path = 'php5-fpm.slow.log';
+        
+        $this->filesystemMock->expects($this->once())
+            ->method('has')
+            ->with($path)
+            ->will($this->returnValue(true));
         
         $this->filesystemMock->expects($this->once())
             ->method('readStream')
             ->with($path)
             ->will($this->returnValue(false));
         
+        $this->filesystemMock->expects($this->never())
+            ->method('readStreamByLine');
+        
+    
         $result = $this->processor->parse($path);
         
         $this->assertNull($result);
+        $this->assertNotEmpty($this->processor->getError());
     }
     
     public function testParseWillReadLines() {
         
-        $path = dirname(__DIR__) . '/assets/php5-fpm.slow.log';
+        $path = 'php5-fpm.slow.log';
         $someResource = 123;
         $someLine = "[27-May-2014 05:43:20]  [pool www] pid 19569\n";
+        
+        $this->filesystemMock->expects($this->once())
+            ->method('has')
+            ->with($path)
+            ->will($this->returnValue(true));
         
         $this->filesystemMock->expects($this->once())
             ->method('readStream')
             ->with($path)
             ->will($this->returnValue($someResource));
         
-        $this->filesystemMock->expects($this->any())
-            ->method('getLine')
+        $this->filesystemMock->expects($this->at(2))
+            ->method('readStreamByLine')
             ->will($this->returnValue($someLine));
-        
+        $this->filesystemMock->expects($this->at(3))
+            ->method('readStreamByLine')
+            ->will($this->returnValue(false));
+
         $result = $this->processor->parse($path);
         
         $this->assertNull($result);

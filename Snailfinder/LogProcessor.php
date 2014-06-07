@@ -10,7 +10,6 @@
 
 namespace Snailfinder;
 
-use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local as LocalAdapter;
 use League\Flysystem\FilesystemInterface;
 
@@ -22,7 +21,9 @@ class LogProcessor {
      */
     private $filesystem;
     
-    /**
+    private $error;
+    
+    /**$path
      * Retrieve filesystem adapter instance
      *
      * If none present, lazy-loads League\Flysystem\Adapter\Local instance.
@@ -47,11 +48,35 @@ class LogProcessor {
         return $this;
     }
     
+    public function setError($message) {
+        $this->error = $message;
+    }
+    
+    public function getError() {
+        return $this->error;
+    }
+    
     public function parse($path) {
-        $stream = $this->filesystem->readStream($path);
+        
+        if (empty($path)) {
+            $this->setError("Path cannot be empty");
+            return;
+        }
+        
+        if (!$this->getFilesystem()->has($path)) {
+            $this->setError("file '$path' not exists");
+            return;
+        }
+        
+        $stream = $this->getFilesystem()->readStream($path);
         
         if (!$stream) {
+            $this->setError("file '$path' not exists or not readable");
             return;
+        }
+        
+        while (($buffer = $this->getFilesystem()->readStreamByLine()) !== false) {
+            //echo $buffer;
         }
         
         // TODO: for mocking this - need extends from Flysystem\Adapter\Local
