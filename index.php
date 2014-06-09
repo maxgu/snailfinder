@@ -21,7 +21,11 @@ $app->events()->attach('501', $errorHandler);
 $app->setView(new PhpView());
 
 $app->get('/', function(App $app){
-    $app->render('index');
+    $viewModel = array(
+        'path' => '/var/log/php5-fpm.slow.log',
+    );
+    
+    $app->render('index', $viewModel);
 });
 
 $app->get('/generate', function(App $app){

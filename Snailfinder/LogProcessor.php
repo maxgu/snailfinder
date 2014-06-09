@@ -10,7 +10,7 @@
 
 namespace Snailfinder;
 
-use League\Flysystem\Adapter\Local as LocalAdapter;
+use Snailfinder\Adapter\Local as LocalAdapter;
 use League\Flysystem\FilesystemInterface;
 
 class LogProcessor {
@@ -75,22 +75,27 @@ class LogProcessor {
             return;
         }
         
-        while (($buffer = $this->getFilesystem()->readStreamByLine()) !== false) {
-            //echo $buffer;
-        }
-        
-        // TODO: for mocking this - need extends from Flysystem\Adapter\Local
-        /*
-        if ($handle) {
-            while (($buffer = fgets($handle, 4096)) !== false) {
-                echo $buffer;
+        $entry = array();
+        $entries = array();
+        while (($line = $this->getFilesystem()->readStreamByLine()) !== false) {
+            
+            if ($line == PHP_EOL) {
+                unset($entry[0]);
+                $entries[] = $entry;
+                $entry = array();
             }
-            if (!feof($handle)) {
-                echo "Error: unexpected fgets() fail\n";
+            
+            if (strpos($line, '0x') !== false) {
+                $line = strstr($line, ' ');
             }
-            fclose($handle);
+            
+            $line = trim($line);
+            
+            if (empty($line)) {
+                continue;
+            }
+            
+            $entry[] = trim($line);
         }
-         */
     }
-    
 }

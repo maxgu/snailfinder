@@ -34,6 +34,7 @@ class LogProcessorTest extends \PHPUnit_Framework_TestCase {
         $filesystem = $processor->getFilesystem();
         
         $this->assertInstanceOf('Snailfinder\Filesystem', $filesystem);
+        $this->assertAttributeInstanceOf('Snailfinder\Adapter\Local', 'adapter', $filesystem);
     }
     
     public function testSetFilesystem() {
