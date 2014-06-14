@@ -75,27 +75,24 @@ class LogProcessor {
             return;
         }
         
-        $entry = array();
-        $entries = array();
-        while (($line = $this->getFilesystem()->readStreamByLine()) !== false) {
+        $entries = $this->processLines($this->getFilesystem());
+        
+        return $entries;
+    }
+    
+    private function processLines(Filesystem $filesystem) {
+        $entry = new Entry();
+        $entries = new EntryCollection(array($entry));
+        while (($line = $filesystem->readStreamByLine()) !== false) {
             
             if ($line == PHP_EOL) {
-                unset($entry[0]);
+                $entry = new Entry();
                 $entries[] = $entry;
-                $entry = array();
             }
             
-            if (strpos($line, '0x') !== false) {
-                $line = strstr($line, ' ');
-            }
-            
-            $line = trim($line);
-            
-            if (empty($line)) {
-                continue;
-            }
-            
-            $entry[] = trim($line);
+            $entry->registerLine($line);
         }
+        
+        return $entries;
     }
 }
