@@ -9,6 +9,7 @@ include 'vendor/autoload.php';
 use Phlyty\App;
 use Snailfinder\ErrorHandler;
 use Snailfinder\LogProcessor;
+use Snailfinder\ReportBuilder;
 use Snailfinder\PhpView;
 
 $app = new App();
@@ -31,7 +32,10 @@ $app->get('/', function(App $app){
 $app->get('/generate', function(App $app){
     
     $processor = new LogProcessor();
-    $processor->parse($app->request()->getQuery('path'));
+    $entries = $processor->parse($app->request()->getQuery('path'));
+    
+    $reportBuilder = new ReportBuilder();
+    $reportBuilder->build($entries);
     
     $viewModel = array(
         'path' => $app->request()->getQuery('path', ''),
