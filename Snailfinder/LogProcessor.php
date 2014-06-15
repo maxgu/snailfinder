@@ -10,51 +10,10 @@
 
 namespace Snailfinder;
 
-use Snailfinder\Adapter\Local as LocalAdapter;
-use League\Flysystem\FilesystemInterface;
-
 class LogProcessor {
     
-    /**
-     *
-     * @var FilesystemInterface
-     */
-    private $filesystem;
-    
-    private $error;
-    
-    /**$path
-     * Retrieve filesystem adapter instance
-     *
-     * If none present, lazy-loads League\Flysystem\Adapter\Local instance.
-     *
-     * @return FilesystemInterface
-     */
-    public function getFilesystem() {
-        if (!$this->filesystem instanceof FilesystemInterface) {
-            $this->setFilesystem(new Filesystem(new LocalAdapter('/')));
-        }
-        return $this->filesystem;
-    }
-    
-    /**
-     * Set filesystem adapter object
-     *
-     * @param  FilesystemInterface $filesystem
-     * @return LogProcessor
-     */
-    public function setFilesystem(FilesystemInterface $filesystem){
-        $this->filesystem = $filesystem;
-        return $this;
-    }
-    
-    public function setError($message) {
-        $this->error = $message;
-    }
-    
-    public function getError() {
-        return $this->error;
-    }
+    use FilesystemAwareTrait;
+    use ErrorsAwareTrait;
     
     public function parse($path) {
         
